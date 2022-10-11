@@ -75,7 +75,7 @@ Here comes ggplot! Using the *default settings* in **ggplot()**
 ```{r}
 theme_set(theme_bw())
 library(ggplot2)
-ggplot(diamonds, aes(x=carat,y=price)) + 
+ggplot(diamonds, aes(x=cut,y=price)) + 
                           geom_point() + 
                           labs(y = 'price $', x = 'carat value')
 ```
@@ -254,25 +254,19 @@ For a more comprehensive view of ggplot2, take a look at the ggplot2 [Cheat shee
 ## Maps
 ### load United States state map data
 ```{r}
-#install.packages('maps') # you only need to do this once. maps package includes various maps that we can use.
-#install.packages('sf') # you only need to do this once
+install.packages('map') # you only need to do this once. maps package includes various maps that we can use.
+install.packages('s') # you only need to do this once
+library(ggplot2)
 library(maps)     # Provides latitude and longitude data for various maps
 library(sf)
-# read the state population data
-MainStates <- map_data("state")
 
-#plot all states with ggplot2, using black borders and light blue fill
-ggplot() + 
-  geom_polygon( data=MainStates, aes(x=long, y=lat, group=group),
-                color="black", fill="lightblue" ) +
-                coord_sf(crs = st_crs(4326)) # projection
-
+states <- map_data('state')
+head(states)
 ```
-
-
 ```{r}
 library(mapview)
 library(sf)
+
 states <- st_read('/Users/bilene/Downloads/us-states/us-states.shp')
 # you can select the map styles (alternatively: map.types = "Esri.WorldImagery" add option inside mapview)
 # mapviewOptions(basemaps = c("OpenStreetMap","Esri.WorldImagery","OpenTopoMap"))
@@ -280,13 +274,51 @@ mapview(states,zcol='population', col.regions = blues9)
 ```
 
 ```{r}
+#Map of U.S. states using ggplot2
+ggplot() + geom_polygon(data=states,fill=states$group,color ='black', aes(x=long,y=lat,group=group)) 
++ coord_sf(st_crs(4326))#ase is a x and y variable (x should be longitude, y= latitude ) 
+```
+
+```{r}
+Map of U.S. states using ggplot2
+ggplot() + geom_polygon(data=states,fill=states$group, coord_sf(st_crs(4326)), aes(x=long,y=lat,group=group),fill=region) + theme(legend.position = 'none') + coord_sf(st_crs(4326)) #ase is a x and y variable (x should be longitude, y= latitude ) 
+```
+```{r}
+install.packages('mapview')
+library(mapview)
+library(sf)
+
+df_states <- st_read("/Users/yun-yeosong/Downloads/us-states (1)/us-states.shp"))
+mapview(df_states, zcol='population') #
+/Users/yun-yeosong/Downloads/us-states (1)/us-states.shp
+```
+
+
+
+
+
+
+```{r}
 map1 <- mapview(states[states$NAME=='Pennsylvania',], col.regions = blues9, layer.name = "PA") 
 map2 <- mapview(states[states$NAME=='South Carolina',], col.regions = blues9, layer.name = "SC")
 # use the mapview options to turn off legends, hover etc: legend = FALSE, label = FALSE, popup = FALSE
-#install.packages('leafsync')
+install.packages('leafsync')
 library(leafsync)
-sync(map1, map2)
 #or 
 #mapviewOptions(basemaps = c("OpenStreetMap"))
-#map1 | map2
+#map for PA only
+map1 <- mapview(df_states[df_states$Name=='Pennsylvania',],layer.name='PA',col.regions=blues9)
+
+#map for SC only
+map2 <- mapview(df_states[df_states$Name=='South Carolina',],layer.name='SC',col.regions=blues9)
+sync(map1,map2) 
+```
+```{r}
+#Map of U.S. states using ggplot2
+ggplot() + geom_polygon(data=states,fill='lightblue',colors ='black', aes(x=long,y=lat,group=group)) 
++ coord_sf(st_crs(4326))#ase is a x and y variable (x should be longitude, y= latitude ) 
+```
+```{r}
+#Map of U.S. states using ggplot2
+ggplot() + geom_polygon(data=states,fill='lightblue',colors ='black', aes(x=long,y=lat,group=group)) 
 ```
