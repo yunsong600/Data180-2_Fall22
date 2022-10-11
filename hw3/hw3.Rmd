@@ -65,7 +65,6 @@ Recreate the scatterplot in Task 2. Add the following functionality:
 ```{r}
 library(ggplot2)
 ggplot(Cars93, aes(x=EngineSize,y=MPG.city,colour=Type)) + geom_point(size=2) + geom_smooth(col= "red",linetype = "dashed")
-
 ```                   
 
 ## Task 4
@@ -90,7 +89,7 @@ Recreate the barplot in Task 4 for different car `Origin`, such that you create 
 
 ```{r}
 library(ggplot2)
-ggplot(data=Cars93, aes(x=Origin, fill = AirBags)) + geom_bar( position = 'dodge') +labs(x="AirBags",y="Frequency",aes(x=AirBags)) # how to make Airbags in the function of Origin?
+ggplot(data=Cars93, aes(x=Origin, fill = AirBags)) + geom_bar( position = 'dodge') +labs(x="AirBags",y="Frequency",aes(x=AirBags)) 
 ```
 
 # Maps
@@ -102,7 +101,6 @@ Load Australia's state map data via running:
 library(ozmaps)
 library(sf)
 au_states <- ozmaps::ozmap_states # read in spatial dataframe object
-
 # Display the data
 head(au_states)
 ```
@@ -156,7 +154,7 @@ Let's take a look at a different projection output. Change your map's projection
 ```{r}
 library(mapview)
 library(sf)
-ggplot(au_states) + geom_sf(data=au_states,fill='lightblue') + coord_sf(crs = st_crs(3112)) # aes(x=lat,y=long....?)
+ggplot(au_states) + geom_sf(data=au_states,fill='lightblue') + coord_sf(crs = st_crs(3112)) 
 ```
 
 ## Task 5
